@@ -22,9 +22,9 @@ export default function TabLayout() {
           backgroundColor: "#000",
           borderTopWidth: 0,
           position: "absolute",
-          bottom: 0,
+          bottom: -15,
           elevation: 0,
-          height: 65,
+          height: 68,
         },
       }}
     >

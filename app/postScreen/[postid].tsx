@@ -1,3 +1,4 @@
+import Loader from "@/components/Loader";
 import Post from "@/components/Post";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -15,6 +16,10 @@ export default function PostScreen() {
   const posts = useQuery(api.posts.getPostById, {
     postId: postid as Id<"posts">,
   });
+
+  if (posts === undefined) {
+    return <Loader />;
+  }
 
   return (
     <View className="flex-1 bg-black ">

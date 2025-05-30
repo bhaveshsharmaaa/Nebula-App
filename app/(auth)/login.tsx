@@ -1,10 +1,19 @@
 import { useSSO } from "@clerk/clerk-expo";
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Login() {
   const { startSSOFlow } = useSSO();
+  const [isLoading, setIsLoading] = useState(false);
   const handlePress = async () => {
+    setIsLoading(true);
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy: "oauth_google",
@@ -15,6 +24,8 @@ export default function Login() {
       }
     } catch (error) {
       console.log("Error during SSO flow:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -34,14 +45,18 @@ export default function Login() {
       <Text style={styles.subtitle}>Capture. Share. Connect.</Text>
 
       {/* Google Sign In */}
-      <TouchableOpacity style={styles.googleButton} onPress={handlePress}>
-        <Image
-          source={require("../../assets/images/google-logo.png")}
-          style={styles.googleLogo}
-          resizeMode="contain"
-        />
-        <Text style={styles.googleText}>Continue with Google</Text>
-      </TouchableOpacity>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#60A5FA" />
+      ) : (
+        <TouchableOpacity style={styles.googleButton} onPress={handlePress}>
+          <Image
+            source={require("../../assets/images/google-logo.png")}
+            style={styles.googleLogo}
+            resizeMode="contain"
+          />
+          <Text style={styles.googleText}>Continue with Google</Text>
+        </TouchableOpacity>
+      )}
 
       {/* Terms */}
       <Text style={styles.termsText}>
