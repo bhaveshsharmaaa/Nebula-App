@@ -38,7 +38,7 @@ export default function Login() {
 
       {/* App Title */}
       <Text className="text-white text-4xl font-extrabold text-center mb-2">
-        SocialSync
+        Nebula
       </Text>
 
       <Text className="text-gray-400 text-lg text-center mb-8">
