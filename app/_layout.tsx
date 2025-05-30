@@ -44,9 +44,9 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <SafeAreaView onLayout={onLayoutRootView} className="flex-1 bg-black ">
           <InitialLayout />
+          <StatusBar style="light" />
         </SafeAreaView>
       </SafeAreaProvider>
-      <StatusBar style="light" />
     </ClerkAndConvexProvider>
   );
 }

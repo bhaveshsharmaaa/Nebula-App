@@ -1,13 +1,9 @@
 import { useSSO } from "@clerk/clerk-expo";
-import { useRouter } from "expo-router";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Login() {
   const { startSSOFlow } = useSSO();
-
-  const router = useRouter();
-
   const handlePress = async () => {
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
@@ -15,10 +11,7 @@ export default function Login() {
       });
 
       if (setActive && createdSessionId) {
-        // Set the session as active
         setActive({ session: createdSessionId });
-        // Navigate to the home screen after successful login
-        router.replace("/(tabs)");
       }
     } catch (error) {
       console.log("Error during SSO flow:", error);
@@ -26,44 +19,93 @@ export default function Login() {
   };
 
   return (
-    <View className="flex-1 bg-black px-6 justify-center">
+    <View style={styles.container}>
       {/* Illustration */}
-      <View className="items-center mb-6">
+      <View style={styles.illustrationContainer}>
         <Image
           source={require("../../assets/images/Mobile login-bro.png")}
-          className="w-96 h-96"
+          style={styles.illustration}
           resizeMode="contain"
         />
       </View>
 
       {/* App Title */}
-      <Text className="text-white text-4xl font-extrabold text-center mb-2">
-        Nebula
-      </Text>
-
-      <Text className="text-gray-400 text-lg text-center mb-8">
-        Capture. Share. Connect.
-      </Text>
+      <Text style={styles.title}>Nebula</Text>
+      <Text style={styles.subtitle}>Capture. Share. Connect.</Text>
 
       {/* Google Sign In */}
-      <TouchableOpacity
-        onPress={handlePress}
-        className="flex-row items-center justify-center bg-white py-4 px-5 rounded-full shadow-md shadow-gray-500 active:opacity-80"
-      >
+      <TouchableOpacity style={styles.googleButton} onPress={handlePress}>
         <Image
           source={require("../../assets/images/google-logo.png")}
-          className="w-5 h-5 mr-3"
+          style={styles.googleLogo}
           resizeMode="contain"
         />
-        <Text className="text-black font-semibold text-base">
-          Continue with Google
-        </Text>
+        <Text style={styles.googleText}>Continue with Google</Text>
       </TouchableOpacity>
 
       {/* Terms */}
-      <Text className="text-gray-500 text-xs text-center mt-6">
+      <Text style={styles.termsText}>
         By continuing, you agree to our Terms & Privacy Policy.
       </Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    paddingHorizontal: 24,
+    justifyContent: "center",
+  },
+  illustrationContainer: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  illustration: {
+    width: 384,
+    height: 384,
+  },
+  title: {
+    color: "white",
+    fontSize: 32,
+    fontFamily: "Pacifico-Regular",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitle: {
+    color: "#9CA3AF",
+    fontSize: 18,
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  googleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 9999,
+    shadowColor: "#6B7280",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+  },
+  googleLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 12,
+  },
+  googleText: {
+    color: "black",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  termsText: {
+    color: "#6B7280",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 24,
+  },
+});

@@ -24,7 +24,7 @@ export default function TabLayout() {
           position: "absolute",
           bottom: 0,
           elevation: 0,
-          height: 68,
+          height: 65,
         },
       }}
     >
@@ -93,7 +93,7 @@ export default function TabLayout() {
                     width: size,
                     height: size,
                     borderRadius: size / 2,
-                    borderWidth: 2,
+                    borderWidth: focused ? 2 : 1,
                     borderColor: "#fff",
                   }}
                 />

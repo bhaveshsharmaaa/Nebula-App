@@ -42,7 +42,7 @@
     "react-native": "0.79.2",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-image-picker": "^8.2.1",
-    "react-native-reanimated": "^3.18.0",
+    "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-web": "~0.20.0",
@@ -56,6 +56,13 @@
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
     "typescript": "~5.8.3"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
   },
   "private": true
 }
