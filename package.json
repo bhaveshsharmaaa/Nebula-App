@@ -19,6 +19,7 @@
     "convex": "^1.24.3",
     "date-fns": "^2.29.3",
     "expo": "~53.0.9",
+    "expo-auth-session": "^6.1.5",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
     "expo-dev-client": "~5.1.8",
@@ -35,6 +36,7 @@
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.4",
     "expo-system-ui": "~5.0.7",
+    "expo-updates": "^0.28.13",
     "expo-web-browser": "~14.1.6",
     "nativewind": "^4.1.23",
     "react": "19.0.0",
@@ -48,7 +50,8 @@
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "svix": "^1.66.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

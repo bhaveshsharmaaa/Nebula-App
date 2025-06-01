@@ -9,6 +9,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
@@ -25,6 +26,7 @@ import {
 export default function Profile() {
   const { signOut, userId } = useAuth();
   const [isEditableModal, setIsEditableModal] = useState(false);
+  const [isSavedLoading, setIsSavedLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const generateUploadUrl = useMutation(api.posts.generateUploadUrl);
 
@@ -36,6 +38,7 @@ export default function Profile() {
   );
   const updateProfile = useMutation(api.users.updateUser);
   const posts = useQuery(api.posts.getPostsByUser, {});
+  const updateUserImage = useMutation(api.users.updateUserImage);
 
   const [editedProfile, setEditedProfile] = useState({
     username: currentUser?.username || "",
@@ -61,31 +64,43 @@ export default function Profile() {
       alert("Username and Full Name are required.");
       return;
     }
+    setIsSavedLoading(true);
 
     try {
-      const uploadUrl = await generateUploadUrl();
-      const uploadResponse = await FileSystem.uploadAsync(
-        uploadUrl,
-        selectedImage ?? "",
-        {
-          httpMethod: "POST",
-          uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
-          mimeType: "image/jpeg",
-        }
-      );
-      if (uploadResponse.status !== 200) {
-        throw new Error("Image upload failed");
-      }
+      if (!selectedImage) {
+        await updateProfile({
+          username: editedProfile.username,
+          fullname: editedProfile.fullname,
+          bio: editedProfile.bio,
+        });
+        setIsSavedLoading(false);
+      } else {
+        const uploadUrl = await generateUploadUrl();
+        const uploadResponse = await FileSystem.uploadAsync(
+          uploadUrl,
+          selectedImage,
+          {
+            httpMethod: "POST",
+            uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
+            mimeType: "image/jpeg",
+          }
+        );
 
-      const { storageId } = JSON.parse(uploadResponse.body);
-      // await createPost({ storageId, caption });
-      await updateProfile({
-        username: editedProfile.username,
-        fullname: editedProfile.fullname,
-        bio: editedProfile.bio,
-        storageId,
-      });
-      setSelectedImage(null);
+        if (uploadResponse.status !== 200) {
+          throw new Error("Image upload failed");
+        }
+        const { storageId } = JSON.parse(uploadResponse.body);
+        await updateProfile({
+          username: editedProfile.username,
+          fullname: editedProfile.fullname,
+          bio: editedProfile.bio,
+        });
+        await updateUserImage({
+          storageId,
+        });
+        setSelectedImage(null);
+        setIsSavedLoading(false);
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile. Please try again.");
@@ -241,9 +256,13 @@ export default function Profile() {
                 style={[styles.modalBtn, { backgroundColor: "#C13584" }]}
                 onPress={handleSave}
               >
-                <Text style={[styles.modalBtnText, { color: "#fff" }]}>
-                  Save
-                </Text>
+                {isSavedLoading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Text style={[styles.modalBtnText, { color: "#fff" }]}>
+                    Save
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>

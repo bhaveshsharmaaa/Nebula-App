@@ -37,19 +37,26 @@
       ],
       "expo-font"
     ],
-
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "1ae25910-e777-4a0f-ad06-7a2e7a5d2f33"
+        "projectId": "4dd25b01-8188-45cd-9d49-91f9d1a1a00b"
       },
       "clerkPublishableKey": "pk_test_aW1tb3J0YWwtbHlueC0xNS5jbGVyay5hY2NvdW50cy5kZXYk",
       "convexUrl": "https://lovely-labrador-785.convex.cloud",
       "clerkRedirectUri": "nebula://clerk/oauth-callback"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4dd25b01-8188-45cd-9d49-91f9d1a1a00b"
     }
   }
 }

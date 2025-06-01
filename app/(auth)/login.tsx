@@ -1,37 +1,32 @@
 import { useSSO } from "@clerk/clerk-expo";
-import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import * as AuthSession from "expo-auth-session";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Login() {
   const { startSSOFlow } = useSSO();
-  const [isLoading, setIsLoading] = useState(false);
+  const redirectUri = AuthSession.makeRedirectUri({
+    native: "nebula://clerk/oauth-callback",
+  });
+
   const handlePress = async () => {
-    setIsLoading(true);
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy: "oauth_google",
+        redirectUrl: redirectUri,
       });
 
-      if (setActive && createdSessionId) {
-        setActive({ session: createdSessionId });
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+      } else {
       }
     } catch (error) {
       console.log("Error during SSO flow:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Illustration */}
       <View style={styles.illustrationContainer}>
         <Image
           source={require("../../assets/images/Mobile login-bro.png")}
@@ -39,26 +34,17 @@ export default function Login() {
           resizeMode="contain"
         />
       </View>
-
       {/* App Title */}
       <Text style={styles.title}>Nebula</Text>
       <Text style={styles.subtitle}>Capture. Share. Connect.</Text>
-
-      {/* Google Sign In */}
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#60A5FA" />
-      ) : (
-        <TouchableOpacity style={styles.googleButton} onPress={handlePress}>
-          <Image
-            source={require("../../assets/images/google-logo.png")}
-            style={styles.googleLogo}
-            resizeMode="contain"
-          />
-          <Text style={styles.googleText}>Continue with Google</Text>
-        </TouchableOpacity>
-      )}
-
-      {/* Terms */}
+      <TouchableOpacity style={styles.googleButton} onPress={handlePress}>
+        <Image
+          source={require("../../assets/images/google-logo.png")}
+          style={styles.googleLogo}
+          resizeMode="contain"
+        />
+        <Text style={styles.googleText}>Continue with Google</Text>
+      </TouchableOpacity>
       <Text style={styles.termsText}>
         By continuing, you agree to our Terms & Privacy Policy.
       </Text>

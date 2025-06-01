@@ -70,26 +70,36 @@ export const updateUser = mutation({
   args: {
     username: v.optional(v.string()),
     fullname: v.optional(v.string()),
-    email: v.optional(v.string()),
     bio: v.optional(v.string()),
-    storageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const currentUser = await getAuthenticatedUser(ctx);
 
-    if (!args.storageId) {
-      throw new Error("Storage ID is required to update the image");
-    }
-    const imageUrl = await ctx.storage.getUrl(args.storageId);
-    if (!imageUrl) {
-      throw new Error("Image URL not found");
+    if (!currentUser) {
+      throw new Error("User not authenticated");
     }
 
     await ctx.db.patch(currentUser._id, {
       username: args.username ?? currentUser.username,
       fullname: args.fullname ?? currentUser.fullname,
-      email: args.email ?? currentUser.email,
       bio: args.bio ?? currentUser.bio,
+    });
+  },
+});
+
+export const updateUserImage = mutation({
+  args: {
+    storageId: v.id("_storage"),
+  },
+  handler: async (ctx, args) => {
+    const currentUser = await getAuthenticatedUser(ctx);
+
+    if (!currentUser) {
+      throw new Error("User not authenticated");
+    }
+    const imageUrl = await ctx.storage.getUrl(args.storageId);
+
+    await ctx.db.patch(currentUser._id, {
       image: imageUrl ?? currentUser.image,
     });
   },

@@ -62,7 +62,6 @@ export default function Post({ post }: PostProps) {
   const deletePostMutaion = useMutation(api.posts.deletePost);
 
   const vibrateFeedback = () => {
-    // More reliable vibration across platforms
     if (Platform.OS === "android") {
       Vibration.vibrate(50);
     } else {

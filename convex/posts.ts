@@ -4,8 +4,8 @@ import { getAuthenticatedUser } from "./users";
 
 export const generateUploadUrl = mutation({
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
+    const currentUser = await getAuthenticatedUser(ctx);
+    if (!currentUser) {
       throw new Error("User is not authenticated");
     }
     return await ctx.storage.generateUploadUrl();
@@ -46,6 +46,9 @@ export const createPost = mutation({
 export const getFeedPosts = query({
   handler: async (ctx) => {
     const currentUser = await getAuthenticatedUser(ctx);
+    if (!currentUser) {
+      throw new Error("User not authenticated");
+    }
     const posts = await ctx.db.query("posts").order("desc").collect();
 
     if (posts.length === 0) {
@@ -193,6 +196,10 @@ export const getPostsByUser = query({
     userId: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
+    const currentUser = await getAuthenticatedUser(ctx);
+    if (!currentUser) {
+      throw new Error("User not authenticated");
+    }
     const user = args.userId
       ? await ctx.db.get(args.userId)
       : await getAuthenticatedUser(ctx);

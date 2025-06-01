@@ -20,7 +20,10 @@ export default function UserProfileScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
 
-  const profile = useQuery(api.users.getUserProfile, { id: id as Id<"users"> });
+  const profile = useQuery(
+    api.users.getUserProfile,
+    id ? { id: id as Id<"users"> } : "skip"
+  );
   const posts = useQuery(api.posts.getPostsByUser, {
     userId: id as Id<"users">,
   });

@@ -1,44 +1,33 @@
 import { useAuth } from "@clerk/clerk-expo";
-import { Slot, Stack, useRouter, useSegments } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { Stack, useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
 
-SplashScreen.preventAutoHideAsync();
-
-export default function AppLayout() {
+export default function InitialLayout() {
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
   const router = useRouter();
-  const [isNavigationReady, setIsNavigationReady] = useState(false);
 
-  const isAuthRoute = segments[0] === "(auth)";
   useEffect(() => {
-    if (!isLoaded) return;
-
-    if (!isSignedIn && !isAuthRoute) {
-      router.replace("/(auth)/login");
-    } else if (isSignedIn && isAuthRoute) {
-      router.replace("/(tabs)");
+    if (!isLoaded) {
+      return;
     }
 
-    setIsNavigationReady(true);
+    const isAuthScreen = segments[0] === "(auth)";
+
+    if (!isSignedIn && !isAuthScreen) router.replace("/(auth)/login");
+    else if (isSignedIn && isAuthScreen) {
+      router.replace("/(tabs)");
+    }
   }, [isLoaded, isSignedIn, segments]);
 
-  // 🔐 Wait until Clerk is ready and we've handled navigation
-  if (!isLoaded || !isNavigationReady) {
-    return null;
-  }
+  if (!isLoaded) return null;
 
-  return isAuthRoute ? (
-    <Slot />
-  ) : (
+  return (
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: "ios_from_right", // Smooth transition
-        contentStyle: {
-          backgroundColor: "#000000", // Prevent white screen by matching your app background
-        },
+        contentStyle: { backgroundColor: "#000000" },
+        animation: "slide_from_right",
       }}
     />
   );
