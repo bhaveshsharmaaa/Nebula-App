@@ -18,6 +18,7 @@ import {
 export default function Index() {
   const [refreshing, setRefreshing] = useState(false);
   const posts = useQuery(api.posts.getFeedPosts);
+
   const router = useRouter();
 
   const onRefresh = () => {
@@ -58,9 +59,13 @@ export default function Index() {
             <Text style={styles.headerText}>Nebula</Text>
             <TouchableOpacity
               style={styles.searchIcon}
-              onPress={() => router.push("/search")}
+              onPress={() => router.push("/notifications")}
             >
-              <Ionicons name="search-outline" size={26} color="white" />
+              <Ionicons
+                name={"notifications-outline"}
+                size={26}
+                color="white"
+              />
             </TouchableOpacity>
           </View>
         )}

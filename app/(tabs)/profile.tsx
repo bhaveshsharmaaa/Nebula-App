@@ -165,7 +165,7 @@ export default function Profile() {
 
         {/* Posts Grid */}
         <FlatList
-          data={posts}
+          data={[...posts].reverse()} // 👈 Reverse the array here
           numColumns={3}
           keyExtractor={(_, idx) => idx.toString()}
           renderItem={({ item }) => (
@@ -176,7 +176,6 @@ export default function Profile() {
                   params: { postid: item._id },
                 })
               }
-              activeOpacity={0.8}
             >
               <Image source={{ uri: item.imageUrl }} style={styles.postImage} />
             </TouchableOpacity>

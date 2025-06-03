@@ -96,7 +96,7 @@ export default function UserProfileScreen() {
         </Pressable>
 
         <FlatList
-          data={posts}
+          data={[...posts].reverse()}
           numColumns={3}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (

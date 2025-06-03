@@ -193,9 +193,6 @@ export const getUserByUsername = query({
       .withIndex("byUsername", (q) => q.eq("username", args.username))
       .first();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
     return user;
   },
 });

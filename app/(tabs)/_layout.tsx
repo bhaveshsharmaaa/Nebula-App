@@ -42,12 +42,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="bookmarks"
+        name="search"
         options={{
-          title: "Bookmarks",
+          title: "Seach",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "bookmark" : "bookmark-outline"}
+              name={focused ? "search" : "search-outline"}
               size={size}
               color="#fff"
             />
@@ -68,12 +68,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="bookmarks"
         options={{
-          title: "Notifications",
+          title: "Bookmarks",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "notifications" : "notifications-outline"}
+              name={focused ? "bookmark" : "bookmark-outline"}
               size={size}
               color="#fff"
             />

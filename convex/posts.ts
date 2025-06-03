@@ -261,3 +261,12 @@ export const getPostById = query({
     return postWithinfo;
   },
 });
+export const getAllImages = query({
+  handler: async (ctx) => {
+    const posts = await ctx.db.query("posts").collect();
+    return posts.map((post) => ({
+      _id: post._id,
+      imageUrl: post.imageUrl,
+    }));
+  },
+});
