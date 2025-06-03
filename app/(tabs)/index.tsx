@@ -1,7 +1,9 @@
 import Loader from "@/components/Loader";
 import Post from "@/components/Post";
 import { api } from "@/convex/_generated/api";
+import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -9,12 +11,14 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
 export default function Index() {
   const [refreshing, setRefreshing] = useState(false);
   const posts = useQuery(api.posts.getFeedPosts);
+  const router = useRouter();
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -52,6 +56,12 @@ export default function Index() {
         ListHeaderComponent={() => (
           <View style={styles.header}>
             <Text style={styles.headerText}>Nebula</Text>
+            <TouchableOpacity
+              style={styles.searchIcon}
+              onPress={() => router.push("/search")}
+            >
+              <Ionicons name="search-outline" size={26} color="white" />
+            </TouchableOpacity>
           </View>
         )}
         contentContainerStyle={styles.contentContainer}
@@ -69,6 +79,9 @@ const styles = StyleSheet.create({
     paddingBottom: 64,
   },
   header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
     backgroundColor: "black",
   },
@@ -76,8 +89,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: "#FFFFFF",
     fontFamily: "Pacifico-Regular",
-
     marginBottom: 16,
+    marginTop: 8,
+  },
+  searchIcon: {
+    marginBottom: 16,
+    marginTop: 8,
   },
   emptyContainer: {
     flex: 1,

@@ -12,7 +12,9 @@ export default defineSchema({
     following: v.number(),
     posts: v.number(),
     clerkId: v.string(),
-  }).index("byClerkId", ["clerkId"]),
+  })
+    .index("byClerkId", ["clerkId"])
+    .index("byUsername", ["username"]),
 
   posts: defineTable({
     userId: v.id("users"),

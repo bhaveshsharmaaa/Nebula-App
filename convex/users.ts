@@ -178,3 +178,24 @@ async function updateFollowsCount(
     });
   }
 }
+
+export const getUserByUsername = query({
+  args: {
+    username: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const currentUser = await getAuthenticatedUser(ctx);
+    if (!currentUser) {
+      throw new Error("User not authenticated");
+    }
+    const user = await ctx.db
+      .query("users")
+      .withIndex("byUsername", (q) => q.eq("username", args.username))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user;
+  },
+});
