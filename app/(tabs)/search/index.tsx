@@ -26,7 +26,7 @@ export default function SearchScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       {/* Tappable Search Bar */}
       <TouchableOpacity
         style={styles.searchBar}
