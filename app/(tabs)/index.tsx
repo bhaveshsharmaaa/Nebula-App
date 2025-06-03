@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: "#FFFFFF",
-    fontFamily: "Pacifico-Regular",
 
     marginBottom: 16,
   },
