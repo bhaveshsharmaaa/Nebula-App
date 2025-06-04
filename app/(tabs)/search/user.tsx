@@ -1,5 +1,6 @@
 import Loader from "@/components/Loader";
 import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
 import { useRouter } from "expo-router";
@@ -21,7 +22,14 @@ export default function SearchUser() {
   const [searchedUsername, setSearchedUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const user = useQuery(
+  const { user } = useUser();
+
+  const convexOrCurrentUser = useQuery(
+    api.users.getUserByClerkId,
+    user?.id ? { clerkId: user.id } : "skip"
+  );
+
+  const searchUser = useQuery(
     api.users.getUserByUsername,
     searchedUsername ? { username: searchedUsername } : "skip"
   );
@@ -78,13 +86,19 @@ export default function SearchUser() {
       {/* User Found */}
       {!loading && user && (
         <TouchableOpacity
-          onPress={() => router.push(`/users/${user._id}`)}
+          onPress={() =>
+            router.push(
+              convexOrCurrentUser?._id === searchUser?._id
+                ? "/(tabs)/profile"
+                : `/users/${searchUser?._id}`
+            )
+          }
           style={styles.userCard}
         >
-          <Image source={{ uri: user.image }} style={styles.userImage} />
+          <Image source={{ uri: searchUser?.image }} style={styles.userImage} />
           <View>
-            <Text style={styles.username}>{user.username}</Text>
-            <Text style={styles.fullname}>{user.fullname}</Text>
+            <Text style={styles.username}>{searchUser?.username}</Text>
+            <Text style={styles.fullname}>{searchUser?.fullname}</Text>
           </View>
         </TouchableOpacity>
       )}
