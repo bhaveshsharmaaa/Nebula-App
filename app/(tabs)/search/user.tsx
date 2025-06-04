@@ -42,10 +42,10 @@ export default function SearchUser() {
   };
 
   useEffect(() => {
-    if (searchedUsername && user !== undefined) {
+    if (searchedUsername && searchUser !== undefined) {
       setLoading(false);
     }
-  }, [user]);
+  }, [searchUser]);
 
   return (
     <KeyboardAvoidingView
@@ -84,7 +84,7 @@ export default function SearchUser() {
       {loading && <Loader />}
 
       {/* User Found */}
-      {!loading && user && (
+      {!loading && searchUser && (
         <TouchableOpacity
           onPress={() =>
             router.push(
@@ -104,7 +104,7 @@ export default function SearchUser() {
       )}
 
       {/* No User Found */}
-      {!loading && searchedUsername && user === null && (
+      {!loading && searchedUsername && searchUser === null && (
         <Text style={styles.notFoundText}>
           No user found for &quot;{searchedUsername}&quot;
         </Text>
